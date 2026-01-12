@@ -98,7 +98,6 @@ urls = {
 with ThreadPoolExecutor(max_workers=2) as executor:
     futures = {name: executor.submit(fetch_with_retry, url, METABASE_HEADERS) for name, url in urls.items()}
     results = {name: f.result() for name, f in futures.items()}
-    print(results)
 
 
 df_Funnel = pd.DataFrame(results["Funnel"].json())
