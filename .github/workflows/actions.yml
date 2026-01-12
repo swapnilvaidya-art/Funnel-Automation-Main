@@ -1,0 +1,81 @@
+name: Run Scheduling.py
+
+on:
+  # Runs every 15 minutes UTC
+  schedule:
+    - cron: '*/15 * * * *'
+  # Manual trigger
+  workflow_dispatch:
+
+jobs:
+  run-scheduling:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Setup Python
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        working-directory: ./
+
+      # Step 4: Prevent overlapping runs & execute Scheduling.py
+      - name: Execute Scheduling.py safely
+        env:
+          PRABHAT_SECRET_KEY: ${{ secrets.PRABHAT_SECRET_KEY }}
+          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          USERNAME: ${{ secrets.USERNAME }}
+          METABASE_URL: ${{ secrets.METABASE_URL }}
+
+          FUNNEL_QUERY: ${{ secrets.FUNNEL_QUERY }}
+          CREATEDON_QUERY: ${{ secrets.CREATEDON_QUERY }}
+          SHEET_ACCESS_KEY: ${{ secrets.SHEET_ACCESS_KEY}}
+
+
+        run: |
+          LOCK_FILE=".scheduling.lock"
+
+          echo "=============================="
+          echo "Workflow triggered at UTC: $(date -u)"
+          echo "Current branch: $GITHUB_REF"
+          echo "Repository path: $GITHUB_WORKSPACE"
+          echo "=============================="
+
+          # Check if another instance is running
+          if [ -f $LOCK_FILE ]; then
+            echo "⚠️ Previous Scheduling.py run is still in progress. Exiting this run."
+            exit 0
+          fi
+
+          # Create lock file
+          touch $LOCK_FILE
+          echo "🚀 Starting Scheduling.py..."
+
+          # Print masked environment sanity check (safe logging)
+          echo "Using Metabase URL: ${METABASE_URL:0:25}****"
+          echo "Using USERNAME variable: ${USERNAME:+[SET]}"
+
+          # Run your Python script
+          python Scheduling.py
+          EXIT_CODE=$?
+
+          # Remove lock file after execution
+          rm -f $LOCK_FILE
+
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "✅ Scheduling.py executed successfully."
+          else
+            echo "❌ Scheduling.py failed with exit code $EXIT_CODE."
+            exit $EXIT_CODE
+          fi
+        working-directory: ./
