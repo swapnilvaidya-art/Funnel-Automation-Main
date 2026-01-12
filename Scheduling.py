@@ -120,7 +120,7 @@ print("Connecting to Google Sheets...")
 sheet = gc.open_by_key(SAK)
 ws1 = sheet.worksheet("Helper StageChange Dump")
 ws3 = sheet.worksheet("Created on Leads")
-ws_pivot = sheet.worksheet("New_DS_Summary")
+ws_pivot = sheet.worksheet("Output Dashboard")
 
 # -------------------- UPDATE SHEETS --------------------
 print("Updating StageChange Dump...")
