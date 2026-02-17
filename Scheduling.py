@@ -104,7 +104,7 @@ df_Funnel = pd.DataFrame(results["Funnel"].json())
 df_Createon = pd.DataFrame(results["Createdon"].json())
 
 common_cols = [
-    'lead_created_on', 'modified_on', 'prospect_email', 'prospect_stage',
+    'lead_created_on', 'modified_on', 'prospect_email', 'prospect_id', 'prospect_stage',
     'mx_prospect_status', 'crm_user_role', 'sales_user_email', 'mx_utm_medium',
     'mx_utm_source', 'mx_lead_quality_grade', 'mx_lead_inherent_intent',
     'mx_priority_status', 'mx_organic_inbound', 'lead_last_call_status',
