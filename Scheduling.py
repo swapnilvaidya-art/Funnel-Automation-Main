@@ -109,7 +109,7 @@ common_cols = [
     'mx_utm_source', 'mx_lead_quality_grade', 'mx_lead_inherent_intent',
     'mx_priority_status', 'mx_organic_inbound', 'lead_last_call_status',
     'mx_city', 'event', 'current_stage', 'previous_stage',
-    'mx_identifer', 'mx_phoenix_identifer'
+    'mx_identifer', 'mx_phoenix_identifer', 'lead_owner'
 ]
 
 # Prepare dataframes
