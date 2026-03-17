@@ -109,7 +109,8 @@ common_cols = [
     'mx_utm_source', 'mx_lead_quality_grade', 'mx_lead_inherent_intent',
     'mx_priority_status', 'mx_organic_inbound', 'lead_last_call_status',
     'mx_city', 'event', 'current_stage', 'previous_stage',
-    'mx_identifer', 'mx_phoenix_identifer', 'lead_owner'
+    'mx_identifer', 'mx_phoenix_identifer', 'lead_owner',
+    'event_date','team_lead','course','m0_or_not'
 ]
 
 # Prepare dataframes
@@ -124,12 +125,12 @@ ws_pivot = sheet.worksheet("Output Dashboard")
 
 # -------------------- UPDATE SHEETS --------------------
 print("Updating StageChange Dump...")
-safe_update_range(ws1, df_Funnel, "A:T")
+safe_update_range(ws1, df_Funnel, "A:Z")
 
 time.sleep(3)
 
 print("Updating CreatedOn Dump...")
-safe_update_range(ws3, df_Createon, "A:T")
+safe_update_range(ws3, df_Createon, "A:Z")
 
 # -------------------- UPDATE TIMESTAMP --------------------
 current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%b-%Y %H:%M:%S")
